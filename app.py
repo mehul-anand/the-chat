@@ -4,11 +4,11 @@ import time
 # from streamlit_chat import message as chat
 from streamlit.components.v1 import html
 
-# html("""
-# <script>
-# window.top.document.querySelectorAll('[href*="streamlit.io"]').forEach(e => e.setAttribute("style", "display: none;"));
-# </script>
-# """)
+html("""
+<script>
+window.top.document.querySelectorAll('[href*="streamlit.io"]').forEach(e => e.setAttribute("style", "display: none;"));
+</script>
+""")
 
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
