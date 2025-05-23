@@ -1,11 +1,8 @@
 import streamlit as st
 import google.generativeai as genai
-import os
-from dotenv import load_dotenv
 import time
 
-load_dotenv()
-GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 MODEL_ROLE = 'ai'
@@ -24,7 +21,9 @@ if 'model' not in st.session_state:
         history=st.session_state.gemini_history
     )
 
-st.title('Temporary Chat')
+st.title('Temporary chat')
+st.text('Your one stop app to discuss anything random with AI')
+
 
 # Display chat messages from session state
 for message in st.session_state.messages:
@@ -33,6 +32,13 @@ for message in st.session_state.messages:
         avatar=message.get('avatar')
     ):
         st.markdown(message['content'])
+
+# Clear Chat Button
+if st.button("Clear Chat"):
+    st.session_state.messages = []
+    st.session_state.gemini_history = []
+    st.session_state.chat = st.session_state.model.start_chat (history=[])
+    st.rerun()  # Refresh the app
 
 # React to user input
 if prompt := st.chat_input('Your message here...'):
