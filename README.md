@@ -5,3 +5,4 @@
 - chat history
 - stop button
 - authentication
+- chat edit feature
