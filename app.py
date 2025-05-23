@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import time
+from streamlit_chat import message as chat
 
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
@@ -21,8 +22,27 @@ if 'model' not in st.session_state:
         history=st.session_state.gemini_history
     )
 
-st.title('Temporary chat')
-st.text('Your one stop app to discuss anything random with AI')
+# st.title('AI Chat')
+st.markdown("""
+    <h1 style="
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(90deg, #846eee, fuchsia);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3em;
+        margin-top: 0.5em;
+    ">
+        AI Chat
+    </h1>
+""", unsafe_allow_html=True)
+st.text('Your one stop app to discuss complex and fun topics with AI')
+
+# Clear Chat Button
+if st.button("Clear Chat"):
+    st.session_state.messages = []
+    st.session_state.gemini_history = []
+    st.session_state.chat = st.session_state.model.start_chat (history=[])
+    st.rerun()  # Refresh the app
 
 
 # Display chat messages from session state
@@ -33,13 +53,6 @@ for message in st.session_state.messages:
     ):
         st.markdown(message['content'])
 
-# Clear Chat Button
-if st.button("Clear Chat"):
-    st.session_state.messages = []
-    st.session_state.gemini_history = []
-    st.session_state.chat = st.session_state.model.start_chat (history=[])
-    st.rerun()  # Refresh the app
-
 # React to user input
 if prompt := st.chat_input('Your message here...'):
     # Display user message
@@ -49,6 +62,10 @@ if prompt := st.chat_input('Your message here...'):
     st.session_state.messages.append(
         dict(role='user', content=prompt)
     )
+    # TODO : add this chat functionality
+    # chat(st.session_state.messages.append(
+    #     dict(role='user', content=prompt)
+    # ),is_user=True)
 
     # Send message to AI
     response = st.session_state.chat.send_message(
@@ -79,3 +96,38 @@ if prompt := st.chat_input('Your message here...'):
         )
     )
     st.session_state.gemini_history = st.session_state.chat.history
+
+
+    
+st.markdown(
+    """
+    <style>
+    /* make footer stick to the viewport bottom */
+    .footer {
+        position: fixed;
+        bottom: 12px;        /* push it a bit above the chat-input bar         */
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #888;
+        z-index: 100;        /* show it above the main page but below modals   */
+        font-size:1em;
+        color:white;
+    }
+    .footer a {
+        text-decoration:none;
+        # background: linear-gradient(90deg, #846eee, fuchsia);
+        # -webkit-background-clip: text;
+        # -webkit-text-fill-color: transparent;
+    }
+    </style>
+
+    <div class="footer">
+        Made with ❤️ by <a href="https://mehul.xyz" target="_blank">Mehul Anand</a>
+
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
