@@ -1,7 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import time
-from streamlit_chat import message as chat
+# from streamlit_chat import message as chat
 
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
