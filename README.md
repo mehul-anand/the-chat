@@ -3,3 +3,5 @@
   - used gemini 2.0 flash
 ## Future goals
 - chat history
+- stop button
+- authentication
