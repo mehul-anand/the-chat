@@ -2,7 +2,8 @@
 - chat app built with streamlit and gemini api
   - used gemini 2.0 flash
 ## Future goals
-- chat history
-- stop button
-- authentication
-- chat edit feature
+- chat scrolling and header placement [ ✅ ]
+- chat history [ - ]
+- stop button [ - ]
+- authentication [ - ]
+- chat edit feature [ - ]
