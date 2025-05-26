@@ -3,12 +3,15 @@ import google.generativeai as genai
 import time
 # from streamlit_chat import message as chat
 from streamlit.components.v1 import html
+import streamlit_navigation_bar as stnb
 
-# html("""
-# <script>
-# window.top.document.querySelectorAll('[href*="streamlit.io"]').forEach(e => e.setAttribute("style", "display: none;"));
-# </script>
-# """)
+html("""
+<script>
+window.top.document.querySelectorAll('[href*="streamlit.io"]').forEach(e => e.setAttribute("style", "display: none;"));
+</script>
+""")
+
+
 
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
@@ -29,27 +32,61 @@ if 'model' not in st.session_state:
         history=st.session_state.gemini_history
     )
 
-# st.title('AI Chat')
-st.markdown("""
-    <h1 style="
+st.markdown(
+    f'''
+    <style>
+        .reportview-container .sidebar-content {{
+            padding-top: {1}rem;
+        }}
+        .reportview-container .main .block-container {{
+            padding-top: {1}rem;
+        }}
+    </style>
+    ''',unsafe_allow_html=True)
+
+with st.container():
+    st.markdown("""
+    <style>
+    #main-div {
+        top: 1.5rem;
+        background-color:#111111;
+    }
+
+    @media (min-width: 768px) {
+        #main-div {
+            top: 4rem;
+        }
+    }
+                
+    h1{
         font-family: 'Segoe UI', sans-serif;
         background: linear-gradient(90deg, #846eee, fuchsia);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-size: 3em;
-        margin-top: 0.5em;
-    ">
-        AI Chat
-    </h1>
+        font-size: 3em;  
+    }
+    </style>
+    <div id="main-div">
+        <h1>
+            AI Chat
+        </h1>
+        <p class="desc">
+            Your one stop app to discuss complex and fun topics with AI
+        </p> 
+        <p class="desc">
+            More detailed and structured prompt = better outputs
+        </p> 
+        <p class="desc">
+            Be responsible with your AI use and have fun exploring the wonders of technology 🤠
+        </p> 
+    </div>
 """, unsafe_allow_html=True)
-st.text('Your one stop app to discuss complex and fun topics with AI')
 
-# Clear Chat Button
-if st.button("Clear Chat"):
-    st.session_state.messages = []
-    st.session_state.gemini_history = []
-    st.session_state.chat = st.session_state.model.start_chat (history=[])
-    st.rerun()  # Refresh the app
+
+# st.title("AI Chat")
+# st.text("Your one stop app to discuss complex and fun topics with AI\n"
+# "More detailed and structured prompt = better outputs\n"
+# "Be responsible with your AI use and have fun exploring the wonders of technology 🤠")
 
 
 # Display chat messages from session state
@@ -102,7 +139,14 @@ if prompt := st.chat_input('Your message here...'):
             avatar=AI_AVATAR_ICON
         )
     )
+    # Clear Chat Button
+if st.button("Clear Chat"):
+    st.session_state.messages = []
+    st.session_state.gemini_history = []
+    st.session_state.chat = st.session_state.model.start_chat (history=[])
+    st.rerun()  # Refresh the app
     st.session_state.gemini_history = st.session_state.chat.history
+    
 
 
     
@@ -137,4 +181,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
