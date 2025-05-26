@@ -3,44 +3,55 @@ import google.generativeai as genai
 import time
 from streamlit.components.v1 import html
 
-# html("""
-# <script>
-# window.top.document.querySelectorAll('[href*="streamlit.io"]').forEach(e => e.setAttribute("style", "display: none;"));
-# </script>
-# """)
+# --------------------------------------------------------
+#styling start
+# wide layout config
+# st.set_page_config(
+#     layout="wide",
+# )
 
+# footer styling
+html("""
+<script>
+window.top.document.querySelectorAll('[href*="streamlit.io"]').forEach(e => e.setAttribute("style", "display: none;"));
+</script>
+""")
 
-
-GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
-genai.configure(api_key=GOOGLE_API_KEY)
-
-MODEL_ROLE = 'ai'
-AI_AVATAR_ICON = '🤖'
-
-# Initialize session state
-if 'messages' not in st.session_state:
-    st.session_state.messages = []
-if 'gemini_history' not in st.session_state:
-    st.session_state.gemini_history = []
-
-# Initialize Gemini model and chat
-if 'model' not in st.session_state:
-    st.session_state.model = genai.GenerativeModel('gemini-2.0-flash')
-    st.session_state.chat = st.session_state.model.start_chat(
-        history=st.session_state.gemini_history
-    )
-
+# main block padding
 st.markdown(
-    f'''
-    <style>
-        .reportview-container .sidebar-content {{
-            padding-top: {1}rem;
-        }}
-        .reportview-container .main .block-container {{
-            padding-top: {1}rem;
-        }}
-    </style>
-    ''',unsafe_allow_html=True)
+    body="""
+        <style>
+            .block-container{
+                    padding-top: 0px;
+                }
+        </style>
+    """, 
+    unsafe_allow_html=True
+)
+
+# fixing the header
+
+header = st.container()
+header.title("AI Chat")
+header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
+st.markdown(
+    """
+<style>
+    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
+        position: sticky;
+        top: 2.875rem;
+        background-color: #111111;
+        z-index: 999;
+    }
+    .fixed-header {
+        border-bottom: 1px solid #846eee;
+    }
+</>
+    """,
+    unsafe_allow_html=True
+)
+
+# main block content and styling
 
 with st.container():
     st.markdown("""
@@ -65,9 +76,6 @@ with st.container():
     }
     </style>
     <div id="main-div">
-        <h1>
-            AI Chat
-        </h1>
         <p class="desc">
             Your one stop app to discuss complex and fun topics with AI
         </p> 
@@ -79,7 +87,29 @@ with st.container():
         </p> 
     </div>
 """, unsafe_allow_html=True)
+    
+# styling end
+# --------------------------------------------------------
 
+# configure the google API
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+genai.configure(api_key=GOOGLE_API_KEY)
+
+MODEL_ROLE = 'ai'
+AI_AVATAR_ICON = '🤖'
+
+# Initialize session state
+if 'messages' not in st.session_state:
+    st.session_state.messages = []
+if 'gemini_history' not in st.session_state:
+    st.session_state.gemini_history = []
+
+# Initialize Gemini model and chat
+if 'model' not in st.session_state:
+    st.session_state.model = genai.GenerativeModel('gemini-2.0-flash')
+    st.session_state.chat = st.session_state.model.start_chat(
+        history=st.session_state.gemini_history
+    )
 
 # Display chat messages from session state
 for message in st.session_state.messages:
@@ -98,10 +128,13 @@ if prompt := st.chat_input('Your message here...'):
     st.session_state.messages.append(
         dict(role='user', content=prompt)
     )
+
+    # --------------------------------------------------------
     # TODO : add this chat functionality
     # chat(st.session_state.messages.append(
     #     dict(role='user', content=prompt)
     # ),is_user=True)
+    # --------------------------------------------------------
 
     # Send message to AI
     response = st.session_state.chat.send_message(
@@ -140,21 +173,21 @@ if st.button("Clear Chat"):
     st.session_state.gemini_history = st.session_state.chat.history
     
 
-
+# --------------------------------------------------------
+# custom footer start
     
 st.markdown(
     """
     <style>
-    /* make footer stick to the viewport bottom */
     .footer {
         position: fixed;
-        bottom: 12px;        /* push it a bit above the chat-input bar         */
+        bottom: 12px;        
         left: 0;
         width: 100%;
         text-align: center;
         font-size: 0.9rem;
         color: #888;
-        z-index: 100;        /* show it above the main page but below modals   */
+        z-index: 100;        
         font-size:1em;
         color:white;
     }
@@ -173,3 +206,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+# custom footer end
+# --------------------------------------------------------
