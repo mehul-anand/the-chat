@@ -1,9 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import time
-# from streamlit_chat import message as chat
 from streamlit.components.v1 import html
-import streamlit_navigation_bar as stnb
 
 html("""
 <script>
@@ -17,7 +15,7 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 MODEL_ROLE = 'ai'
-AI_AVATAR_ICON = '✨'
+AI_AVATAR_ICON = '🤖'
 
 # Initialize session state
 if 'messages' not in st.session_state:
@@ -81,12 +79,6 @@ with st.container():
         </p> 
     </div>
 """, unsafe_allow_html=True)
-
-
-# st.title("AI Chat")
-# st.text("Your one stop app to discuss complex and fun topics with AI\n"
-# "More detailed and structured prompt = better outputs\n"
-# "Be responsible with your AI use and have fun exploring the wonders of technology 🤠")
 
 
 # Display chat messages from session state
